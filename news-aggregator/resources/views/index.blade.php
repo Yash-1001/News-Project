@@ -1,43 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>News Aggregator</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div class="container mt-4">
-    <h1 class="mb-4">Latest News</h1>
+@extends('layouts.app')
 
-    <div class="mb-3">
+@section('content')
+<div class="container">
+    <h2>Latest News</h2>
+
+    {{-- Category Filter --}}
+    <div class="mb-4">
         <strong>Categories:</strong>
         @foreach($categories as $category)
-            <a href="{{ route('news.category', $category->id) }}" class="btn btn-sm btn-outline-primary">{{ $category->name }}</a>
+            <a href="{{ url('/category/' . $category->id) }}" class="btn btn-sm btn-outline-primary m-1">
+                {{ $category->name }}
+            </a>
         @endforeach
     </div>
 
-    @foreach($articles as $article)
-        <div class="card mb-3">
-            <div class="row g-0">
-                @if($article->urlToImage)
-                <div class="col-md-4">
-                    <img src="{{ $article->urlToImage }}" class="img-fluid rounded-start" alt="image">
-                </div>
-                @endif
-                <div class="col-md-8">
+    {{-- Articles --}}
+    <div class="row">
+        @forelse($articles as $article)
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">{{ $article->title }}</h5>
-                        <p class="card-text">{{ $article->description }}</p>
-                        <a href="{{ $article->url }}" target="_blank" class="btn btn-sm btn-primary">Read more</a>
-                        <p class="card-text"><small class="text-muted">By {{ $article->author }} | {{ \Carbon\Carbon::parse($article->publishedAt)->diffForHumans() }}</small></p>
+                        <p class="card-text">{{ Str::limit($article->description, 150) }}</p>
+                        <a href="{{ $article->url }}" class="btn btn-primary" target="_blank">Read More</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{ \Carbon\Carbon::parse($article->published_at)->format('d M Y, h:i A') }}
                     </div>
                 </div>
             </div>
-        </div>
-    @endforeach
+        @empty
+            <p>No articles found.</p>
+        @endforelse
+    </div>
 
-    <div class="d-flex justify-content-center">
+    <div class="mt-4">
         {{ $articles->links() }}
     </div>
 </div>
-</body>
-</html>
+@endsection

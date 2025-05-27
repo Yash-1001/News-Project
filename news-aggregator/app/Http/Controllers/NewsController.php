@@ -16,7 +16,7 @@ class NewsController extends Controller
         $articles = Article::latest()->paginate(10);
         $categories = Category::all();
 
-        return view('news.index', compact('articles', 'categories'));
+        return view('index', compact('articles', 'categories'));
     }
 
     public function byCategory($id)
@@ -24,6 +24,6 @@ class NewsController extends Controller
         $articles = Article::where('category_id', $id)->latest()->paginate(10);
         $categories = Category::all();
 
-        return view('news.index', compact('articles', 'categories'));
+        return view('index', compact('articles', 'categories'));
     }
 }
