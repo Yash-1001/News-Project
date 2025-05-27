@@ -16,6 +16,10 @@
 
     {{-- Articles --}}
     <div class="row">
+        <form action="{{ route('news.search') }}" method="GET" class="mb-4">
+    <input type="text" name="query" class="form-control" placeholder="Search news..." value="{{ request('query') }}">
+</form>
+
         @forelse($articles as $article)
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
